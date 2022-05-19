@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lan g=" en ">
 
 <head>
     <meta charset="UTF-8">
@@ -7,44 +7,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="assets/js/tailwind.js"></script>
+    <script src="assets/js/jquery.js"></script>
+
+
 </head>
 
 <body>
 
     <div class=" p-12 gap-6 grid grid-cols-2">
-        <div class="bg-gray-300 p-12 rounded shadow">CurrentOrder</div>
+
+
+        <div class="bg-gray-600 p-4 rounded shadow text-white">
+
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gray-800 shadow-md  ">
+                        <th class="p-2 ">#</th>
+                        <th class="p-2 ">Name</th>
+                        <th class="p-2 ">Qty</th>
+                        <th class="p-2 ">Price</th>
+                        <th class="p-2 ">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+                <!-- <tr class="bg-gray-500 ">
+                    <th class="p-2">1</th>
+                    <th class="p-2">Biryani</th>
+                    <th class="p-2">
+                        <input type="number" class="border-2 p-1 bg-transparent" value="1" size="5" min="1" max="5">
+                    </th>
+                    <th class="p-2">200</th>
+                    <th class="p-2">400</th>
+                </tr> -->
+            </table>
+
+        </div>
+
+
+
+
+
         <div class="bg-gray-200 p-4  rounded shadow text-center grid grid-cols-3 gap-4">
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
+            <div class="p-4 item cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
                 <img src="assets/images/biryani.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Biryani</h1>
-            </div>
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/karhai.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Qorma</h1>
-            </div>
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/biryani.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Karhai</h1>
+                <div class="flex justify-between">
+                    <h1 class="mt-4 text-xl font-bold" id="name">Biryani</h1>
+                    <h1 class="mt-4 text-xl text-gray-400 font-bold" id="price" data-price="200">Rs.200</h1>
+
+                </div>
             </div>
 
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/biryani.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Biryani</h1>
-            </div>
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/karhai.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Qorma</h1>
-            </div>
-            <div class="p-4 cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/biryani.jpg" class="rounded-md" alt="" srcset="">
-                <h1 class="mt-4 text-xl font-bold">Karhai</h1>
-            </div>
 
 
 
         </div>
     </div>
 
+
+    <script>
+
+        $(document).ready(function () {
+
+            var items = [
+                {
+                    name: "Biryani",
+                    price: 200,
+                    image: "biryani.jpg",
+                },
+                {
+                    name: "Karhai",
+                    price: 400,
+                    image: "karhai.jpg",
+                },
+                {
+                    name: "Qorma",
+                    price: 600,
+                    image: "qorma.jpg",
+                },
+            ];
+
+
+
+            $('.item').click(function () {
+                var item_name = $(this).find('#name').text();
+                var item_price = $(this).find('#price').data('price');
+
+                alert(item_name + " => " + item_price);
+            });
+
+
+        });
+    </script>
 </body>
 
 </html>
