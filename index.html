@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Order Management System</title>
     <script src="assets/js/tailwind.js"></script>
     <script src="assets/js/jquery.js"></script>
 
@@ -31,38 +31,21 @@
                 </thead>
 
                 <tbody id="tableBody">
-
                 </tbody>
-                <!-- <tr class="bg-gray-500 ">
-                    <th class="p-2">1</th>
-                    <th class="p-2">Biryani</th>
-                    <th class="p-2">
-                        <input type="number" class="border-2 p-1 bg-transparent" value="1" size="5" min="1" max="5">
-                    </th>
-                    <th class="p-2">200</th>
-                    <th class="p-2">400</th>
-                </tr> -->
+
             </table>
+            <div class="flex flex-col">
+                <input type="number" id="dicount" class="p-1 text-black" placeholder="Discount (%)" />
+                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="subtotal">SubTotal: Rs.0</div>
+                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="discountamount">Discount Amount:
+                    Rs.0
+                </div>
+                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="total">Net Total: Rs.0</div>
+            </div>
 
         </div>
 
-
-
-
-
         <div id="parentDiv" class="bg-gray-200 p-4  rounded shadow text-center grid grid-cols-3 gap-4">
-            <!-- <div class="p-4 item cursor-pointer transform hover:scale-105 duration-500 rounded shadow bg-white">
-                <img src="assets/images/biryani.jpg" class="rounded-md" alt="" srcset="">
-                <div class="flex justify-between">
-                    <h1 class="mt-4 text-xl font-bold" id="name">Biryani</h1>
-                    <h1 class="mt-4 text-xl text-gray-400 font-bold" id="price" data-price="200">Rs.200</h1>
-
-                </div>
-            </div> -->
-
-
-
-
         </div>
     </div>
 
@@ -142,6 +125,7 @@
                         if (item.name == item_name) {
                             item.qty++;
                             item.total = item.qty * item.price;
+
                             var currentItemSelected = $('#item_' + item_name);
                             currentItemSelected.children()[2].children[0].value = item.qty;
                             currentItemSelected.children()[4].innerHTML = "Rs." + item.total;
@@ -169,22 +153,73 @@
                         <th class="p-2">1</th>
                         <th class="p-2">${item_name}</th>
                         <th class="p-2">
-                            <input type="number" class="border-2 p-1 bg-transparent" value="1" size="5" min="1" max="5">
+                            <input type="number" id="qty_${item_name}" class="border-2  p-1 bg-transparent" value="1" size="5" min="1" max="5">
                         </th>
                         <th class="p-2">Rs.${item_price}</th>
                         <th class="p-2">Rs.${item_price}</th>
                     </tr>`;
 
                     tableBody.append(tableRow);
+
+
+
+
+                    $('#qty_' + item_name).change(function () {
+                        var qty = $(this).val();
+
+                        order_items.forEach(function (item) {
+                            if (item.name == item_name) {
+                                item.qty = qty;
+                                item.total = item.qty * item.price;
+                                var currentItemSelected = $('#item_' + item_name);
+                                currentItemSelected.children()[2].children[0].value = item.qty;
+                                currentItemSelected.children()[4].innerHTML = "Rs." + item.total;
+                            }
+                        });
+
+                        var dic_per = $('#dicount').val() || 0;
+                        var total = 0;
+                        order_items.forEach(item => {
+                            total += item.total;
+                        });
+
+                        $("#subtotal").html("Sub Total: Rs." + total);
+                        var discount = total * dic_per / 100;
+                        $("#discountamount").html("Discount Amount: Rs." + discount);
+                        $("#total").html("Net Total: Rs." + (total - discount));
+
+
+                    });
+
                 }
 
-                console.log(order_items);
+                var dic_per = $('#dicount').val() || 0;
+                var total = 0;
+                order_items.forEach(item => {
+                    total += item.total;
+                });
 
+                $("#subtotal").html("Sub Total: Rs." + total);
+                var discount = total * dic_per / 100;
+                $("#discountamount").html("Discount Amount: Rs." + discount);
+                $("#total").html("Net Total: Rs." + (total - discount));
 
             });
 
 
+            $('#dicount').change(function () {
+                var dic_per = $(this).val();
+                var total = 0;
+                order_items.forEach(item => {
+                    total += item.total;
+                });
 
+                $("#subtotal").html("Sub Total: Rs." + total);
+                var discount = total * dic_per / 100;
+                $("#discountamount").html("Discount Amount: Rs." + discount);
+                $("#total").html("Net Total: Rs." + (total - discount));
+
+            });
 
         });
     </script>
