@@ -20,12 +20,14 @@
 
             <table class="w-full">
                 <thead>
-                    <tr class="bg-gray-800 shadow-md  ">
+                    <tr class="bg-gray-800 shadow-md text-left ">
                         <th class="p-2 ">#</th>
                         <th class="p-2 ">Name</th>
                         <th class="p-2 ">Qty</th>
                         <th class="p-2 ">Price</th>
                         <th class="p-2 ">Total</th>
+                        <th class="p-2 text-center">Action</th>
+
                     </tr>
                 </thead>
 
@@ -33,13 +35,27 @@
                 </tbody>
 
             </table>
-            <div class="flex flex-col">
-                <input type="number" id="dicount" class="p-1 text-black" placeholder="Discount (%)" />
-                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="subtotal">SubTotal: Rs.0</div>
-                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="discountamount">Discount Amount:
-                    Rs.0
+            <div class="flex justify-end">
+                <input type="text" id="dicount" class="p-2 text-white bg-transparent w-2/12 text-right text-xl px-8 "
+                    placeholder="Discount (%)" />
+            </div>
+            <div class="flex justify-between w-full ">
+
+                <div class="float-right  bg-gray-800 w-full  p-1 font-bold text-xl">SubTotal: <span id="subtotal"
+                        class="float-right">
+                    </span></div>
+            </div>
+            <div class="flex justify-end">
+                <div class="float-right  bg-gray-800 p-1 w-full font-bold text-xl">Discount Amount:
+                    <span id="discountamount" class="float-right">
+                    </span>
                 </div>
-                <div class="float-right  bg-gray-800 p-1 font-bold text-xl" id="total">Net Total: Rs.0</div>
+            </div>
+
+            <div class="flex justify-end">
+                <div class="float-right  bg-gray-800 p-1 w-full font-bold text-xl">Net Total: <span id="total"
+                        class="float-right">
+                    </span></div>
             </div>
 
         </div>
@@ -135,10 +151,10 @@
                     total += item.total;
                 });
 
-                $("#subtotal").html("Sub Total: Rs." + total);
+                $("#subtotal").html("Rs." + total);
                 var discount = total * dic_per / 100;
-                $("#discountamount").html("Discount Amount: Rs." + discount);
-                $("#total").html("Net Total: Rs." + (total - discount));
+                $("#discountamount").html("Rs." + discount);
+                $("#total").html("Rs." + (total - discount));
             }
 
             function updateOrderItems(item_name, qty) {
@@ -157,16 +173,31 @@
                 var tableBody = $("#tableBody");
 
                 var tableRow = `<tr class="bg-gray-500" id="item_${item.name}">
-                        <th class="p-2">1</th>
-                        <th class="p-2">${item.name}</th>
-                        <th class="p-2">
+                        <td class="p-2">1</td>
+                        <td class="p-2">${item.name}</td>
+                        <td class="p-2">
                             <input type="number" id="qty_${item.name}" class="border-2  p-1 bg-transparent" value="1" size="5" min="1" max="5">
-                        </th>
-                        <th class="p-2">Rs.${item.price}</th>
-                        <th class="p-2">Rs.${item.price}</th>
+                        </td>
+                        <td class="p-2">Rs.${item.price}</td>
+                        <td class="p-2">Rs.${item.price}</td>
+                        <td class="p-2 text-center"><button id="item_del_${item.name}" class="bg-red-500 text-white rounded-md shadow px-4 py-1">Delete</button></td>
                     </tr>`;
 
+
+
                 tableBody.append(tableRow);
+
+                $('#item_del_' + item.name).click(function () {
+                    $('#item_' + item.name).remove();
+
+                    order_items.forEach(function (itemm, index) {
+                        if (itemm.name == item.name) {
+                            order_items.splice(index, 1);
+                        }
+                    });
+
+                    calculateTotalWithDiscount();
+                });
             }
 
             function addItemToOrderItems(item_name, item_price) {
@@ -192,6 +223,7 @@
                 });
                 return item_exists;
             }
+
         });
     </script>
 </body>
