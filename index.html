@@ -14,9 +14,9 @@
 
 <body>
 
-    <div class=" p-12 gap-6 grid grid-cols-2">
+    <div class=" p-12 gap-6 ">
 
-        <div class="bg-gray-600 p-4 rounded shadow text-white">
+        <div class="bg-gray-600 p-4 float-left rounded shadow w-6/12 text-white">
 
             <table class="w-full">
                 <thead>
@@ -36,7 +36,7 @@
 
             </table>
             <div class="flex justify-end">
-                <input type="text" id="dicount" class="p-2 text-white bg-transparent w-2/12 text-right text-xl px-8 "
+                <input type="text" id="discount" class="p-2 text-white bg-transparent w-2/12 text-right text-xl px-8 "
                     placeholder="Discount (%)" />
             </div>
             <div class="flex justify-between w-full ">
@@ -58,14 +58,28 @@
                     </span></div>
             </div>
 
+
+            <div class="bg-gray-700 p-6 flex justify-between  ">
+                <button class="bg-red-500 px-12 rounded py-3 shadow" id="resetBtn">Reset</button>
+                <button class="bg-green-600 text-white py-3 px-12 rounded shadow" id="confirmOrder">Confirm
+                    Order</button>
+
+            </div>
+
         </div>
 
-        <div id="parentDiv" class="bg-gray-200 p-4  rounded shadow text-center grid grid-cols-3 gap-4">
+        <div id="parentDiv" class="bg-gray-200 p-4 w-6/12  rounded shadow text-center grid grid-cols-3 gap-4">
         </div>
     </div>
 
 
     <script>
+
+
+        var username = "SAGHEER";
+
+        document.cookie = "username=" + username;
+
 
         $(document).ready(function () {
 
@@ -87,6 +101,7 @@
                     image: "qorma.jpg",
                 },
             ];
+            var order = [];
 
             updateItems();
             setUpItemClickListener();
@@ -112,7 +127,7 @@
                 });
 
 
-                $('#dicount').change(function () {
+                $('#discount').change(function () {
                     calculateTotalWithDiscount();
                 });
             }
@@ -145,7 +160,7 @@
             }
 
             function calculateTotalWithDiscount() {
-                var dic_per = $('#dicount').val() || 0;
+                var dic_per = $('#discount').val() || 0;
                 var total = 0;
                 order_items.forEach(item => {
                     total += item.total;
@@ -224,7 +239,25 @@
                 return item_exists;
             }
 
+            $('#resetBtn').click(function () {
+                order_items = [];
+                calculateTotalWithDiscount();
+                $('#tableBody').empty();
+                $('#discount').val(0);
+
+            });
+
+            $('#confirmOrder').click(function () {
+
+                var discount = $('#discount').val();
+                order.push(order_items);
+                order.push(discount);
+
+            });
+
         });
+
+
     </script>
 </body>
 
