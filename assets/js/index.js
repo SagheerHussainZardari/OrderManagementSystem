@@ -5,13 +5,12 @@ $(document).ready(function () {
     var order_items = [];
     var dis = 0;
     if (prev_order != '') {
-        console.log('bhara hua hai');
         var json_order = JSON.parse(prev_order);
         order_items = json_order[0];
         dis = json_order[1];
 
         order_items.forEach(item => {
-            addItemToTableBody(item);
+            addItemToTableBodyy(item);
         });
     }
 
@@ -82,9 +81,21 @@ $(document).ready(function () {
                 addItemToOrderItems(item_name, item_price);
 
                 $('#qty_' + item_name).change(function () {
+
                     var qty = $(this).val();
-                    updateOrderItems(item_name, qty);
-                    calculateTotalWithDiscount();
+
+                    if (qty > 10) {
+                        showMessage('Quantity can not be more than 10', 'error');
+                        $(this).val(10);
+                        updateOrderItems(item_name, 10);
+                        calculateTotalWithDiscount();
+                    } else {
+                        // showMessage('Quantity can not be more than 10', 'error');
+
+                        updateOrderItems(item_name, qty);
+                        calculateTotalWithDiscount();
+                    }
+
                 });
             }
             calculateTotalWithDiscount();
@@ -136,17 +147,52 @@ $(document).ready(function () {
 
         $('#discount').val(parseFloat(dis));
 
-        // $('#item_del_' + item.name).click(function () {
-        //     $('#item_' + item.name).remove();
+        $('#item_del_' + item.name).click(function () {
+            $('#item_' + item.name).remove();
 
-        //     order_items.forEach(function (itemm, index) {
-        //         if (itemm.name == item.name) {
-        //             order_items.splice(index, 1);
-        //         }
-        //     });
+            order_items.forEach(function (itemm, index) {
+                if (itemm.name == item.name) {
+                    order_items.splice(index, 1);
+                }
+            });
 
+            calculateTotalWithDiscount();
+        });
+    }
+
+    function addItemToTableBodyy(item) {
+        var tableBody = $("#tableBody");
+
+        var tableRow = `<tr class="bg-gray-500" id="item_${item.name}">
+                        <td class="p-2">1</td>
+                        <td class="p-2">${item.name}</td>
+                        <td class="p-2">
+                            <input type="number" id="qty_${item.name}" class="border-2  p-1 bg-transparent" value="${item.qty}" size="5" min="1" max="5">
+                        </td>
+                        <td class="p-2">Rs.${item.price}</td>
+                        <td class="p-2">Rs.${item.price * item.qty}</td>
+                        <td class="p-2 text-center"><button id="item_del_${item.name}" class="bg-red-500 text-white rounded-md shadow px-4 py-1">Delete</button></td>
+                    </tr>`;
+
+
+
+        tableBody.append(tableRow);
+
+        $('#discount').val(parseFloat(dis));
         calculateTotalWithDiscount();
-        // });
+
+
+        $('#item_del_' + item.name).click(function () {
+            $('#item_' + item.name).remove();
+
+            order_items.forEach(function (itemm, index) {
+                if (itemm.name == item.name) {
+                    order_items.splice(index, 1);
+                }
+            });
+
+            calculateTotalWithDiscount();
+        });
     }
 
     function addItemToOrderItems(item_name, item_price) {
@@ -183,13 +229,23 @@ $(document).ready(function () {
 
     $('#confirmOrder').click(function () {
 
-        var discount = $('#discount').val();
-        order.push(order_items);
-        order.push(discount || 0);
-        //save order in cookie
-        var order_json = JSON.stringify(order);
-        //with 1 year expiry
-        document.cookie = "order=" + order_json + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+        if (order_items.length < 1) {
+            showMessage('No Items Selected', 'error');
+
+        } else {
+
+            var discount = $('#discount').val();
+            order.push(order_items);
+            order.push(discount || 0);
+            //save order in cookie
+            var order_json = JSON.stringify(order);
+            //with 1 year expiry
+            document.cookie = "order=" + order_json + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+            showMessage('Order Has Been Placed', 'success');
+
+
+
+        }
 
     });
 
@@ -208,6 +264,22 @@ $(document).ready(function () {
             }
         }
         return "";
+    }
+
+
+    function showMessage(message, type) {
+        Swal.fire({
+            position: 'center',
+            icon: type,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+
+            willClose: () => {
+                window.location = "print.html";
+            }
+
+        })
     }
 
 });

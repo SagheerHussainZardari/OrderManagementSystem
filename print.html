@@ -1,0 +1,138 @@
+<script src="assets/js/tailwind.js"></script>
+
+<table class="w-8/12 border-2 mx-auto ">
+    <thead>
+        <tr class="  bg-gray-100 text-left ">
+            <th class="p-2 ">#</th>
+            <th class="p-2 ">Name</th>
+            <th class="p-2 ">Qty</th>
+            <th class="p-2 ">Price</th>
+            <th class="p-2 ">Total</th>
+        </tr>
+
+    </thead>
+
+    <tbody id="tableBody">
+        <!-- <tr>
+            <td class="p-2">1</td>
+            <td class="p-2">Biryani</td>
+            <td class="p-2">3</td>
+            <td class="p-2">200</td>
+            <td class="p-2">600</td>
+        </tr> -->
+    </tbody>
+
+
+    <tfoot>
+
+        <tr class=" text-left ">
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 ">Total</th>
+            <th class="p-2 " id="subTotal">Rs.0</th>
+        </tr>
+        <tr class=" text-left ">
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 ">Discount</th>
+            <th class="p-2 " id="discount">Rs.0</th>
+        </tr>
+        <tr class=" text-left ">
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 "></th>
+            <th class="p-2 ">Net Total</th>
+            <th class="p-2 " id="netTotal">Rs.0</th>
+        </tr>
+
+    </tfoot>
+
+
+
+</table>
+
+<div class="w-8/12 mx-auto mt-4 border-2">
+
+    <h1 class="text-center ">Powered By</h1>
+    <h1 class="text-center ">InterSol Systems Ltd</h1>
+
+
+</div>
+
+<script src="assets/js/jquery.js"></script>
+
+<script>
+
+    var order = getCookie('order');
+
+    order = JSON.parse(order);
+    // var discount = JSON.parse(order)[1];
+    var discount = parseFloat(order[1]);
+    var count = 1;
+    var subTotal = 0;
+    order[0].forEach(item => {
+        var tableBody = $('#tableBody');
+
+        var tr = `<tr>
+            <td class="p-2">${count++}</td>
+            <td class="p-2">${item.name}</td>
+            <td class="p-2">${item.qty}</td>
+            <td class="p-2">${item.price}</td>
+            <td class="p-2">${item.total}</td>
+        </tr>`;
+
+        subTotal += item.total;
+
+        tableBody.append(tr);
+    });
+
+    var dicount_amount = subTotal * discount / 100;
+
+    var total = subTotal - dicount_amount;
+
+    $('#subTotal').text('Rs. ' + subTotal);
+    $('#discount').text('Rs. ' + dicount_amount);
+    $('#netTotal').text('Rs. ' + total);
+
+
+
+    document.cookie = "order=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+
+    window.print();
+
+    setTimeout(() => {
+        window.location = 'index.html';
+    }, 500);
+
+
+
+
+
+
+
+
+
+
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+
+
+</script>
